@@ -1,29 +1,25 @@
-/* eslint-disable no-console */
-/* eslint-disable indent */
-const express = require('express');
-const mongoose = require('mongoose');
-const router = require('./routes');
-// const helmet = require('helmet');
+const express = require("express");
+const mongoose = require("mongoose");
+const router = require("./routes");
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  // useNewUrlParser: true,
+// mongoose.connect("mongodb://localhost:27017/mestodb", {
+mongoose.connect("mongodb://127.0.0.1:27017/mestodb", {
+  useNewUrlParser: true,
 });
-// app.use(helmet());
-// временное решение авторизации пользователя
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '1f525cf06e02630312f3fed7',
-//   };
 
-//   next();
-// });
+app.use((req, res, next) => {
+  req.user = {
+    _id: "647ce7842a72a728b94487fe",
+  };
+  next();
+});
 
 app.use(express.json());
 app.use(router);
 
 app.listen(PORT, () => {
-  console.log(`Запрос на ${PORT}`);
+  console.log(`Сервер запущен на ${PORT}`);
 });

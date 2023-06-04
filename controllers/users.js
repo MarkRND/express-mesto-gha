@@ -1,38 +1,71 @@
-const User = require('../models/user');
+const User = require("../models/user");
+const { messageError } = require("../messageError");
 
-const getUserById = (req, res) => {
-  User.findById(req.params.id)
-    .then((user) => {
-      res.status(200).send(user);
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: 'Что-то пошло не так', err: err.message });
-    });
+const getInfoUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (err) {
+    messageError(err, req, res);
+  }
 };
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(200)
-      .send(users)
-      .catch((err) => {
-        res
-          .status(500)
-          .send({ message: 'Что-то пошло не так? жопа', err: err.message });
-      }));
+const getUserId = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      const error = new Error("Пользователь не найден");
+      error.name = "NotFoundError";
+      throw error;
+    }
+    res.send(user);
+  } catch (err) {
+    messageError(err, req, res);
+  }
 };
 
-const createUser = (req, res) => {
-  User.create(req.body)
-    .then((user) => {
-      res.status(201).send(user);
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: 'Что-то пошло не так', err: err.message });
-    });
+const addUser = async (req, res) => {
+  try {
+    const user = await User.create(req.body);
+    res.send(user);
+  } catch (err) {
+    messageError(err, req, res);
+  }
 };
 
-module.exports = { getUserById, getUsers, createUser };
+const updateAvatar = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { avatar } = req.body;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { avatar },
+      { new: true },
+    );
+    res.send(user);
+  } catch (err) {
+    messageError(err, req, res);
+  }
+};
+async function editUser(req, res) {
+  try {
+    const userId = req.user._id;
+    const { name, about } = req.body;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name, about },
+      { new: true, runValidators: true },
+    );
+    res.send(user);
+  } catch (err) {
+    messageError(err, req, res);
+  }
+}
+
+module.exports = {
+  getInfoUsers,
+  getUserId,
+  addUser,
+  updateAvatar,
+  editUser,
+};
