@@ -52,21 +52,14 @@ const editUser = async (req, res) => {
   try {
     const userId = req.user._id;
     const { name, about } = req.body;
-    if (!name || !about) {
-      return res.status(400).json({ message: "Переданы некорректные данные" });
-    }
     const user = await User.findByIdAndUpdate(
       userId,
       { name, about },
       { new: true, runValidators: true },
     );
-
-    if (!user) {
-      return res.status(404).json({ message: "Пользователь не найден" });
-    }
-    res.send(user);
+    res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({ message: "Ошибка сервера" });
+    messageError(err, req, res);
   }
 };
 

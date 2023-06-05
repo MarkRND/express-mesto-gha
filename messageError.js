@@ -7,7 +7,6 @@ const messageError = (err, req, res) => {
     return;
   }
 
-
   if (err.name === "NotFoundError") {
     res.status(404).send({
       message: "карточка или пользователь не найден.",
