@@ -6,7 +6,7 @@ const {
 router.get("/:id", getUserId);
 router.get("/", getInfoUsers);
 router.post("/", addUser);
-router.patch("/users/me", editUser);
-router.patch("/users/me/avatar", updateAvatar);
+router.patch("/me", editUser);
+router.patch("/me/avatar", updateAvatar);
 
 module.exports = router;
