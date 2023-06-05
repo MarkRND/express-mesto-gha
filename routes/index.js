@@ -1,14 +1,12 @@
 const router = require("express").Router();
-const { messageError } = require("../messageError/messageError");
+const NotFoundError = require("../messageError/NotFoundError");
 const usersRoute = require("./users");
 const usersCards = require("./cards");
 
 router.use("/users", usersRoute);
 router.use("/cards", usersCards);
-router.use((req, res) => {
-  const err = new Error("Неверный адрес");
-  err.name = "NotFoundError";
-  messageError(err, req, res);
+router.use(() => {
+  throw new NotFoundError("Неверный адрес");
 });
 
 module.exports = router;
