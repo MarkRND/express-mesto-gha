@@ -21,5 +21,6 @@ app.use(express.json());
 app.use(router);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Сервер запущен на ${PORT}`);
 });

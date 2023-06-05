@@ -1,24 +1,12 @@
 const Card = require("../models/card");
 const { messageError } = require("../messageError");
 
+const NotFoundError = require("../NotFoundError");
+
 const getCards = async (req, res) => {
   try {
     const cards = await Card.find({});
     res.send(cards);
-  } catch (err) {
-    messageError(err, req, res);
-  }
-};
-
-const getCardId = async (req, res) => {
-  try {
-    const card = await Card.findById(req.params.id);
-    if (!card) {
-      const error = new Error("Карточка не найдена");
-      error.name = "NotFoundError";
-      throw error;
-    }
-    res.send(card);
   } catch (err) {
     messageError(err, req, res);
   }
@@ -41,12 +29,10 @@ const addLikeCard = async (req, res) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: userId } },
-      { new: true },
+      { new: true }
     );
     if (!card) {
-      const error = new Error("Нет такой карточки");
-      error.name = "NotFoundError";
-      throw error;
+      throw new NotFoundError("Карточка не найдена");
     }
     res.send(card);
   } catch (err) {
@@ -60,12 +46,10 @@ const deleteLikeCard = async (req, res) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: userId } },
-      { new: true },
+      { new: true }
     );
     if (!card) {
-      const error = new Error("Нет такой карточки");
-      error.name = "NotFoundError";
-      throw error;
+      throw new NotFoundError("Карточка не найдена");
     }
     res.send(card);
   } catch (err) {
@@ -76,13 +60,9 @@ const deleteLikeCard = async (req, res) => {
 const deleteCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-
     const card = await Card.findByIdAndRemove(cardId);
-
     if (!card) {
-      const error = new Error("Нет такой карточки");
-      error.name = "NotFoundError";
-      throw error;
+      throw new NotFoundError("Карточка не найдена");
     }
     res.send(card);
   } catch (err) {
@@ -96,5 +76,4 @@ module.exports = {
   deleteCard,
   addLikeCard,
   deleteLikeCard,
-  getCardId,
 };
