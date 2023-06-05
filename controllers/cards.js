@@ -1,7 +1,7 @@
 const Card = require("../models/card");
-const { messageError } = require("../messageError");
+const { messageError } = require("../messageError/messageError");
 
-const NotFoundError = require("../NotFoundError");
+const NotFoundError = require("../messageError/NotFoundError");
 
 const getCards = async (req, res) => {
   try {
@@ -29,7 +29,7 @@ const addLikeCard = async (req, res) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: userId } },
-      { new: true }
+      { new: true },
     );
     if (!card) {
       throw new NotFoundError("Карточка не найдена");
@@ -46,7 +46,7 @@ const deleteLikeCard = async (req, res) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: userId } },
-      { new: true }
+      { new: true },
     );
     if (!card) {
       throw new NotFoundError("Карточка не найдена");

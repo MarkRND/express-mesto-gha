@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { messageError } = require("../messageError");
+const { messageError } = require("../messageError/messageError");
 const usersRoute = require("./users");
 const usersCards = require("./cards");
 

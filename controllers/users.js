@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 const User = require("../models/user");
-const { messageError } = require("../messageError");
+const { messageError } = require("../messageError/messageError");
 
 const getInfoUsers = async (req, res) => {
   try {
