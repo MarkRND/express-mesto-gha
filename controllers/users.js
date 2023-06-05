@@ -43,7 +43,7 @@ const updateAvatar = async (req, res) => {
       { avatar },
       { new: true },
     );
-    res.status(200).json({ avatar: user.avatar });
+    res.send(user);
   } catch (err) {
     messageError(err, req, res);
   }
