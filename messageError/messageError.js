@@ -14,11 +14,14 @@ const messageError = (err, req, res) => {
     res.status(404).send({ message: err.message });
     return;
   }
+  if (err.name === "ForbiddenError") {
+    res.status(403).send({ message: err.message });
+    return;
+  }
   if (err.code === 11000) {
     res.status(409).send({ message: "Такой email уже есть в базе данных" });
     return;
   }
-
   res.status(500).send({
     message: "Что-то пошло не так",
   });
