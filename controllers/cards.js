@@ -57,18 +57,28 @@ const deleteLikeCard = async (req, res) => {
   }
 };
 
-const deleteCard = async (req, res) => {
+
+const deleteCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
-    const card = await Card.findByIdAndRemove(cardId);
+    const card = await Card.findById(cardId);
+
     if (!card) {
       throw new NotFoundError("Карточка не найдена");
     }
+
+    if (card.owner.toString() !== req.user._id) {
+      throw new NotFoundError("Карточка не найдена22");
+    }
+
+    await Card.findByIdAndRemove(cardId);
     res.send(card);
   } catch (err) {
-    messageError(err, req, res);
+    next(err);
   }
 };
+
+
 
 module.exports = {
   getCards,
