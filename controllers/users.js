@@ -111,7 +111,7 @@ const login = async (req, res, next) => {
         expiresIn: "7d",
       }
     );
-    res.send(token);
+    res.send({ jwt: token });
   } catch (err) {
     next(err);
   }
