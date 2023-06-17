@@ -1,14 +1,21 @@
 /* eslint-disable no-constant-condition */
 const messageError = (err, req, res) => {
-  if ((err.name === "CastError") || (err.name === "ValidationError")) {
+  if (err.name === "CastError" || err.name === "ValidationError") {
     res.status(400).send({
-      message: "переданы некорректные данные ",
+      message: "переданы некорректные данные",
     });
     return;
   }
-
+  if (err.name === "UnauthorizedError") {
+    res.status(401).send({ message: err.message });
+    return;
+  }
   if (err.name === "NotFoundError") {
     res.status(404).send({ message: err.message });
+    return;
+  }
+  if (err.code === 11000) {
+    res.status(409).send({ message: "Такой email уже есть в базе данных" });
     return;
   }
 
