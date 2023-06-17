@@ -5,7 +5,7 @@ const {
   const { validationGetUserId, validationEditUser, validationUpdateAvatar } = require("../middlwares/celebrateJoi");
 
 router.get("/me",  getInfoId);
-router.get("/:id", validationGetUserId, getUserId);
+router.get("/:_id", validationGetUserId, getUserId);
 router.get("/", getInfoUsers);
 router.post("/", addUser);
 router.patch("/me", validationEditUser, editUser);
