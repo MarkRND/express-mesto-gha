@@ -51,7 +51,10 @@ const addUser = async (req, res, next) => {
       email,
       password: hashedPassword,
     });
-    res.send(user);
+    const newUser = user.toObject();
+    delete newUser.password;
+    res.send(newUser);
+    // res.send(user);
   } catch (err) {
     messageError(err, req, res);
     next(err);
