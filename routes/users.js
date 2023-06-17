@@ -1,5 +1,5 @@
 const router = require("express").Router();
-// const { celebrate, Joi } = require('celebrate');
+
 const {
   getInfoUsers, getUserId, getInfoId, addUser, updateAvatar, editUser,  } = require("../controllers/users");
   const { validationGetUserId, validationEditUser, validationUpdateAvatar } = require("../middlwares/celebrateJoi");
