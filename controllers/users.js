@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
 
+const { JWT_SECRET = "unique-secret-key" } = process.env;
 const User = require("../models/user");
 const { messageError } = require("../messageError/messageError");
-
 const NotFoundError = require("../messageError/NotFoundError");
 
 const getInfoUsers = async (req, res, next) => {
@@ -17,7 +17,9 @@ const getInfoUsers = async (req, res, next) => {
 
 const getUserId = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params._id).orFail(new NotFoundError("Пользователь не найден"));
+    const user = await User.findById(req.params._id).orFail(
+      new NotFoundError("Пользователь не найден")
+    );
     res.send(user);
   } catch (err) {
     messageError(err, req, res);
@@ -89,7 +91,7 @@ const editUser = async (req, res) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password")
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
       const err = new Error("Неверный email или password");
       err.name = "UnauthorizedError";
@@ -105,7 +107,7 @@ const login = async (req, res, next) => {
       {
         _id: user._id,
       },
-      "unique-secret-key",
+          JWT_SECRET,
       {
         expiresIn: "7d",
       }
