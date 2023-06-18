@@ -2,7 +2,7 @@ const Card = require("../models/card");
 const { messageError } = require("../messageError/messageError");
 
 const NotFoundError = require("../messageError/NotFoundError");
-const UnauthorizedError = require("../messageError/UnauthorizedError");
+const Forbidden = require("../messageError/Forbidden");
 
 const getCards = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ const addCard = async (req, res) => {
     const card = await Card.create({ name, link, owner: ownerId });
     res.send(card);
   } catch (err) {
-        messageError(err, req, res);
+    messageError(err, req, res);
   }
 };
 
@@ -30,7 +30,7 @@ const addLikeCard = async (req, res) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: userId } },
-      { new: true },
+      { new: true }
     );
     if (!card) {
       throw new NotFoundError("Карточка не найдена");
@@ -47,7 +47,7 @@ const deleteLikeCard = async (req, res) => {
     const card = await Card.findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: userId } },
-      { new: true },
+      { new: true }
     );
     if (!card) {
       throw new NotFoundError("Карточка не найдена");
@@ -66,7 +66,7 @@ const deleteCard = async (req, res) => {
       throw new NotFoundError("Карточка не найдена");
     }
     if (card.owner.toString() !== req.user._id) {
-      throw new UnauthorizedError("У вас нет прав на удаление этой карточки");
+      throw new Forbidden("У вас нет прав на удаление этой карточки");
     }
     const deletedCard = await Card.findByIdAndRemove(cardId);
     res.send(deletedCard);
