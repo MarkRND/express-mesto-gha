@@ -4,7 +4,10 @@ const usersRoute = require("./users");
 const usersCards = require("./cards");
 const { addUser, login } = require("../controllers/users");
 const auth = require("../middlwares/auth");
-const { validationSignin, validationSignup } = require("../middlwares/celebrateJoi");
+const {
+  validationSignin,
+  validationSignup,
+} = require("../middlwares/celebrateJoi");
 
 router.post("/signup", validationSignup, addUser);
 router.post("/signin", validationSignin, login);

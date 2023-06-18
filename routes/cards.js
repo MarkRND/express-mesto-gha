@@ -6,8 +6,12 @@ const {
   addLikeCard,
   deleteLikeCard,
 } = require("../controllers/cards");
-const { validationAddCard, validationDeleteCard,validationAddLikeCard,
-  validationDeleteLikeCard, } = require("../middlwares/celebrateJoi");
+const {
+  validationAddCard,
+  validationDeleteCard,
+  validationAddLikeCard,
+  validationDeleteLikeCard,
+} = require("../middlwares/celebrateJoi");
 
 router.get("/", getCards);
 router.post("/", validationAddCard, addCard);

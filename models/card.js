@@ -14,7 +14,6 @@ const cardSchema = new mongoose.Schema({
     validate: {
       validator: validator.isURL,
       message: "Неверный URL",
-
     },
   },
   owner: {
@@ -38,4 +37,3 @@ const cardSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("card", cardSchema);
-

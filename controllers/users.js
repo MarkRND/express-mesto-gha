@@ -5,7 +5,6 @@ const User = require("../models/user");
 const { messageError } = require("../messageError/messageError");
 
 const NotFoundError = require("../messageError/NotFoundError");
-// const UnauthorizedError = require("../messageError/UnauthorizedError");
 
 const getInfoUsers = async (req, res, next) => {
   try {
