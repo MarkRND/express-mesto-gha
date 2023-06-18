@@ -17,11 +17,10 @@ const getInfoUsers = async (req, res, next) => {
 
 const getUserId = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params._id).orFail(
-      new NotFoundError("Пользователь не найден")
-    );
+    const user = await User.findById(req.params._id).orFail(new NotFoundError("Пользователь не найден"));
     res.send(user);
   } catch (err) {
+    messageError(err, req, res);
     next(err);
   }
 };
@@ -33,6 +32,7 @@ const getInfoId = async (req, res, next) => {
     );
     res.send(user);
   } catch (err) {
+    messageError(err, req, res);
     next(err);
   }
 };
