@@ -1,30 +1,30 @@
 const Card = require("../models/card");
-// const { messageError } = require("../messageError/messageError");
+const { messageError } = require("../messageError/messageError");
 
 const NotFoundError = require("../messageError/NotFoundError");
 const Forbidden = require("../messageError/Forbidden");
 
-const getCards = async (req, res, next) => {
+const getCards = async (req, res) => {
   try {
     const cards = await Card.find({});
     res.send(cards);
   } catch (err) {
-    next(err);
+    messageError(err, req, res);
   }
 };
 
-const addCard = async (req, res, next) => {
+const addCard = async (req, res) => {
   try {
     const { name, link } = req.body;
     const ownerId = req.user._id;
     const card = await Card.create({ name, link, owner: ownerId });
     res.send(card);
   } catch (err) {
-    next(err);
+    messageError(err, req, res);
   }
 };
 
-const addLikeCard = async (req, res, next) => {
+const addLikeCard = async (req, res) => {
   try {
     const userId = req.user._id;
     const card = await Card.findByIdAndUpdate(
@@ -37,11 +37,11 @@ const addLikeCard = async (req, res, next) => {
     }
     res.send(card);
   } catch (err) {
-    next(err);
+    messageError(err, req, res);
   }
 };
 
-const deleteLikeCard = async (req, res, next) => {
+const deleteLikeCard = async (req, res) => {
   try {
     const userId = req.user._id;
     const card = await Card.findByIdAndUpdate(
@@ -54,11 +54,11 @@ const deleteLikeCard = async (req, res, next) => {
     }
     res.send(card);
   } catch (err) {
-    next(err);
+    messageError(err, req, res);
   }
 };
 
-const deleteCard = async (req, res, next) => {
+const deleteCard = async (req, res) => {
   try {
     const { cardId } = req.params;
     const card = await Card.findById(cardId);
@@ -71,7 +71,7 @@ const deleteCard = async (req, res, next) => {
     const deletedCard = await Card.findByIdAndRemove(cardId);
     res.send(deletedCard);
   } catch (err) {
-    next(err);
+    messageError(err, req, res);
   }
 };
 
