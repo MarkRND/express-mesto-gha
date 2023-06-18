@@ -89,7 +89,7 @@ const editUser = async (req, res) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password")
     if (!user) {
       const err = new Error("Неверный email или password");
       err.name = "UnauthorizedError";
