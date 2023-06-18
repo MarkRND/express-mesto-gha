@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const { messageError } = require("../messageError/messageError");
+// const { messageError } = require("../messageError/messageError");
+const NotFoundError = require("../messageError/NotFoundError");
 const usersRoute = require("./users");
 const usersCards = require("./cards");
 const { addUser, login } = require("../controllers/users");
@@ -12,5 +13,8 @@ router.post("/signin", validationSignin, login);
 router.use(auth);
 router.use("/users", usersRoute);
 router.use("/cards", usersCards);
+router.use(() => {
+  throw new NotFoundError('Указан неправильный путь');
+});
 
 module.exports = router;
