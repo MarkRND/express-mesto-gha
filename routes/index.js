@@ -1,14 +1,10 @@
 const router = require("express").Router();
-
-const NotFoundError = require("../messageError/NotFoundError");
+const { messageError } = require("../messageError/messageError");
 const usersRoute = require("./users");
 const usersCards = require("./cards");
 const { addUser, login } = require("../controllers/users");
 const auth = require("../middlwares/auth");
-const {
-  validationSignin,
-  validationSignup,
-} = require("../middlwares/celebrateJoi");
+const { validationSignin, validationSignup } = require("../middlwares/celebrateJoi");
 
 router.post("/signup", validationSignup, addUser);
 router.post("/signin", validationSignin, login);
@@ -16,8 +12,10 @@ router.post("/signin", validationSignin, login);
 router.use(auth);
 router.use("/users", usersRoute);
 router.use("/cards", usersCards);
-router.use(() => {
-  throw new NotFoundError("Страница не найдена");
+router.use((req, res) => {
+  const err = new Error("Неверный адрес");
+  err.name = "NotFoundError";
+  messageError(err, req, res);
 });
 
 module.exports = router;
