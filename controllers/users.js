@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
 
-const { JWT_SECRET = "unique-secret-key" } = process.env;
+// const { JWT_SECRET = "unique-secret-key" } = process.env;
+const { NODE_ENV, JWT_SECRET = 'dev-key' } = process.env;
 const User = require("../models/user");
 const { messageError } = require("../messageError/messageError");
 const NotFoundError = require("../messageError/NotFoundError");
@@ -107,7 +108,8 @@ const login = async (req, res, next) => {
       {
         _id: user._id,
       },
-          JWT_SECRET,
+          // JWT_SECRET,
+          NODE_ENV === 'production' ? JWT_SECRET : 'dev-key',
       {
         expiresIn: "7d",
       }
