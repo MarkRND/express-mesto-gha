@@ -2,6 +2,7 @@ const Card = require("../models/card");
 const { messageError } = require("../messageError/messageError");
 
 const NotFoundError = require("../messageError/NotFoundError");
+const UnauthorizedError = require("../messageError/UnauthorizedError");
 
 const getCards = async (req, res) => {
   try {
@@ -57,20 +58,22 @@ const deleteLikeCard = async (req, res) => {
   }
 };
 
-
 const deleteCard = async (req, res) => {
   try {
     const { cardId } = req.params;
-    const card = await Card.findByIdAndRemove(cardId);
+    const card = await Card.findById(cardId);
     if (!card) {
       throw new NotFoundError("Карточка не найдена");
     }
-    res.send(card);
+    if (card.owner.toString() !== req.user._id) {
+      throw new UnauthorizedError("У вас нет прав на удаление этой карточки");
+    }
+    const deletedCard = await Card.findByIdAndRemove(cardId);
+    res.send(deletedCard);
   } catch (err) {
     messageError(err, req, res);
   }
 };
-
 
 module.exports = {
   getCards,
