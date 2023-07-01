@@ -22,7 +22,6 @@ const getUserId = async (req, res, next) => {
     );
     res.send(user);
   } catch (err) {
-    messageError(err, req, res);
     next(err);
   }
 };
@@ -34,7 +33,6 @@ const getInfoId = async (req, res, next) => {
     );
     res.send(user);
   } catch (err) {
-    messageError(err, req, res);
     next(err);
   }
 };
@@ -107,8 +105,8 @@ const login = async (req, res, next) => {
       {
         _id: user._id,
       },
-          "JWT_SECRET",
-          // NODE_ENV === 'production' ? JWT_SECRET : 'dev-key',
+      "JWT_SECRET",
+      // NODE_ENV === 'production' ? JWT_SECRET : 'dev-key',
       {
         expiresIn: "7d",
       }
