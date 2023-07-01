@@ -21,13 +21,13 @@ const addCard = async (req, res, next) => {
     const card = await Card.create({ name, link, owner: ownerId });
     res.send(card);
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      next(new BadRequestError('Карточка не создана'));
-      return
+    if (err.name === "ValidationError") {
+      next(new BadRequestError("Неудалось создать карточку"));
+      return;
     }
     next(err);
   }
-}
+};
 
 const addLikeCard = async (req, res) => {
   try {
@@ -63,7 +63,7 @@ const deleteLikeCard = async (req, res) => {
   }
 };
 
-const deleteCard = async (req, res) => {
+const deleteCard = async (req, res, next) => {
   try {
     const { cardId } = req.params;
     const card = await Card.findById(cardId);
@@ -76,7 +76,7 @@ const deleteCard = async (req, res) => {
     const deletedCard = await Card.findByIdAndRemove(cardId);
     res.send(deletedCard);
   } catch (err) {
-    messageError(err, req, res);
+    next(err);
   }
 };
 
