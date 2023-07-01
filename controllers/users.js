@@ -6,6 +6,7 @@ const User = require("../models/user");
 const { messageError } = require("../messageError/messageError");
 const NotFoundError = require("../messageError/NotFoundError");
 const BadRequestError = require("../messageError/BadRequestError");
+const ConflictError = require("../messageError/ConflictError");
 
 const getInfoUsers = async (req, res, next) => {
   try {
@@ -53,7 +54,14 @@ const addUser = async (req, res, next) => {
     delete newData.password;
     res.send(newData);
   } catch (err) {
-    messageError(err, req, res);
+    if (err.code === 11000) {
+      next(new ConflictError("Такой email уже есть в базе данных"));
+      return;
+    }
+    if (err.name === "ValidationError") {
+      next(new BadRequestError("Не удалось создать пользователя"));
+      return;
+    }
     next(err);
   }
 };
