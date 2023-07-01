@@ -3,6 +3,7 @@ const { messageError } = require("../messageError/messageError");
 
 const NotFoundError = require("../messageError/NotFoundError");
 const ForbiddenError = require("../messageError/ForbiddenError");
+const BadRequestError = require("../messageError/BadRequestError");
 
 const getCards = async (req, res, next) => {
   try {
@@ -13,16 +14,20 @@ const getCards = async (req, res, next) => {
   }
 };
 
-const addCard = async (req, res) => {
+const addCard = async (req, res, next) => {
   try {
     const { name, link } = req.body;
     const ownerId = req.user._id;
     const card = await Card.create({ name, link, owner: ownerId });
     res.send(card);
   } catch (err) {
-    messageError(err, req, res);
+    if (err.name === 'ValidationError') {
+      next(new BadRequestError('Карточка не создана'));
+      return
+    }
+    next(err);
   }
-};
+}
 
 const addLikeCard = async (req, res) => {
   try {
