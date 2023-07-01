@@ -5,6 +5,7 @@ const jsonwebtoken = require("jsonwebtoken");
 const User = require("../models/user");
 const { messageError } = require("../messageError/messageError");
 const NotFoundError = require("../messageError/NotFoundError");
+const BadRequestError = require("../messageError/BadRequestError");
 
 const getInfoUsers = async (req, res, next) => {
   try {
@@ -57,7 +58,7 @@ const addUser = async (req, res, next) => {
   }
 };
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { avatar } = req.body;
@@ -68,10 +69,14 @@ const updateAvatar = async (req, res) => {
     );
     res.send(user);
   } catch (err) {
-    messageError(err, req, res);
+    if (err.name === "ValidationError") {
+      next(new BadRequestError("переданы некорректные данные"));
+      return;
+    }
+    next(err);
   }
 };
-const editUser = async (req, res) => {
+const editUser = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { name, about } = req.body;
@@ -82,7 +87,11 @@ const editUser = async (req, res) => {
     );
     res.status(200).json(user);
   } catch (err) {
-    messageError(err, req, res);
+    if (err.name === "ValidationError") {
+      next(new BadRequestError("переданы некорректные данные"));
+      return;
+    }
+    next(err);
   }
 };
 
