@@ -4,12 +4,12 @@ const { messageError } = require("../messageError/messageError");
 const NotFoundError = require("../messageError/NotFoundError");
 const ForbiddenError = require("../messageError/ForbiddenError");
 
-const getCards = async (req, res) => {
+const getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
     res.send(cards);
   } catch (err) {
-    messageError(err, req, res);
+    next(err);
   }
 };
 
