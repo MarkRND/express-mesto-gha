@@ -15,8 +15,8 @@ router.post("/signin", validationSignin, login);
 router.use(auth);
 router.use("/users", usersRoute);
 router.use("/cards", usersCards);
-router.use((req, res, next) => {
-  next(new NotFoundError("Неверный адрес"));
+router.use(() => {
+  throw new NotFoundError("Неверный адрес");
 });
 
 module.exports = router;
