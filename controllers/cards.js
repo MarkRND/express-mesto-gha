@@ -1,6 +1,4 @@
 const Card = require("../models/card");
-const { messageError } = require("../messageError/messageError");
-
 const NotFoundError = require("../messageError/NotFoundError");
 const ForbiddenError = require("../messageError/ForbiddenError");
 const BadRequestError = require("../messageError/BadRequestError");
@@ -29,7 +27,7 @@ const addCard = async (req, res, next) => {
   }
 };
 
-const addLikeCard = async (req, res) => {
+const addLikeCard = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const card = await Card.findByIdAndUpdate(
@@ -42,11 +40,11 @@ const addLikeCard = async (req, res) => {
     }
     res.send(card);
   } catch (err) {
-    messageError(err, req, res);
+    next(err);
   }
 };
 
-const deleteLikeCard = async (req, res) => {
+const deleteLikeCard = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const card = await Card.findByIdAndUpdate(
@@ -59,7 +57,7 @@ const deleteLikeCard = async (req, res) => {
     }
     res.send(card);
   } catch (err) {
-    messageError(err, req, res);
+    next(err);
   }
 };
 
