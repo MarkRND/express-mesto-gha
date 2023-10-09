@@ -1,5 +1,6 @@
 [![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)
 # Проект Mesto Russia Frontend + Backend
+Яндекс практикум "Веб-разработка"   (Спринт 13, 14)
 
 ## Ссылка на репозиторий
 Frontend: https://github.com/MarkRND/react-mesto-auth   
